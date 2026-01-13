@@ -60,7 +60,7 @@ if archivo:
     st.dataframe(df)
 """
 
-
+"""
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -89,3 +89,49 @@ fig = px.bar(df_filtrado, x="Mes", y="Ventas", title="Ventas por mes")
 st.plotly_chart(fig)
 # Tabla
 st.dataframe(df_filtrado)
+"""
+
+"""
+import streamlit as st
+import pandas as pd
+import time
+
+st.title("Dashboard en streaming desde un log CSV")
+
+# Refrescar cada 2 segundos
+st_autorefresh = st.rerun
+
+# Leer el archivo CSV
+df = pd.read_csv("log.csv")
+
+# Mostrar datos
+st.subheader("Últimos datos")
+st.dataframe(df.tail(10))
+
+# Mostrar métricas
+st.metric("Último valor", df["valor"].iloc[-1])
+
+# Gráfico en tiempo real
+st.line_chart(df["valor"])
+
+# Esperar y refrescar
+time.sleep(2)
+st.rerun()
+"""
+
+import streamlit as st
+import pandas as pd
+from streamlit_autorefresh import st_autorefresh
+
+
+st.set_page_config(page_title="Streaming Log Dashboard")
+
+# Refrescar cada 2000 ms
+st_autorefresh(interval=2000, key="refresh")
+
+st.title("Dashboard en streaming desde un archivo CSV")
+
+df = pd.read_csv("log.csv")
+
+st.line_chart(df["valor"])
+st.dataframe(df.tail(5))
